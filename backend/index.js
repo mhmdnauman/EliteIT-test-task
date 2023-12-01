@@ -64,9 +64,9 @@ const insertInitialData = () => {
 
             if (productCount === 0) {
                 const initialProducts = [
-                    { name: 'Product 1', details: 'Demo details for Product 1', price: 50 },
-                    { name: 'Product 2', details: 'Demo details for Product 2', price: 70 },
-                    { name: 'Product 3', details: 'Demo details for Product 3', price: 90 }
+                    { name: 'Product Management Tool', details: `Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum. Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum...`, price: 200 },
+                    { name: 'Inventory Management Product', details: `Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum. Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum...`, price: 200 },
+                    { name: 'Hospital Management System', details: `Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum. Lorem Ipsum has been the industry{\'}s standard the dummy text ever Lorem Ipsum...`, price: 200 }
                 ];
 
                 const insertQuery = 'INSERT INTO products (name, details, price) VALUES ?';
