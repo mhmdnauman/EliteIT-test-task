@@ -8,9 +8,11 @@ function Products() {
   const [opened, setOpened] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
+  const [selectedProduct, setSelectedProduct] = useState();
 
-  const handleStarClick = (selectedRating) => {
+  const handleStarClick = (selectedRating, selectedProd) => {
     setRating(selectedRating);
+    setSelectedProduct(selectedProd)
     setOpened(true);
   };
 
@@ -19,7 +21,7 @@ function Products() {
         await axios.post("http://localhost:3000/reviews", {
           name: name,
           email: email,
-          product: 'product',
+          product_name: selectedProduct,
           rating: rating
         });
     } catch (error) {
@@ -97,10 +99,10 @@ function Products() {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <span
                           key={star}
-                          onClick={() => handleStarClick(star)}
+                          onClick={() => handleStarClick(star, product.name)}
                           style={{
                             cursor: "pointer",
-                            color: star <= rating ? "gold" : "gray",
+                            color: star <= rating && selectedProduct==product.name ? "gold" : "gray",
                           }}
                         >
                           &#9733;
@@ -110,7 +112,7 @@ function Products() {
                   </div>
                 </div>
               </div>
-              <button className="bg-red-600 text-white px-3 md:px-4 py-2 md:py-3 rounded-md">
+              <button className={`${product.id%2==1?'bg-red-600  text-white':'text-red-600  bg-white border border-red-600 '} text-center px-3 md:px-4 py-2 md:py-3 `}>
                 Show Details
               </button>
             </div>
@@ -122,9 +124,22 @@ function Products() {
           setRating(0);
           setOpened(false);
         }}
-        title="Rate the product"
+        title={`Rate the product ${selectedProduct}`}
         centered
       >
+        
+       {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          onClick={() => setRating(star)}
+                          style={{
+                            cursor: "pointer",
+                            color: star <= rating ? "gold" : "gray",
+                          }}
+                        >
+                          &#9733;
+                        </span>
+                      ))}
         <Input type="text" placeholder="Your Name" onChange={(e)=>setName(e.target.value)}/>
         <Input type="Email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} className="mt-4"/>
         <Button onClick={submitRating} className="bg-red-800 mt-4">Submit</Button>

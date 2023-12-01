@@ -1,9 +1,22 @@
 const mysql = require('mysql');
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(cors());
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests, please try again later.',
+  });
+
+const bodyParser = require('body-parser');
+
+app.use('/reviews', limiter);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const connection = mysql.createConnection({
     host: 'localhost',

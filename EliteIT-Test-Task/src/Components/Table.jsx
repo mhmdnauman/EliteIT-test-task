@@ -10,7 +10,7 @@ function Table() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/reviews');
+        const response = await axios.get('http://localhost:3000/reviews/all');
         setData(response.data.reviews);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -111,7 +111,7 @@ function Table() {
               <tr key={item.id} className="border-none border-gray-200">
                 <td className="px-6 py-4">{item.name}</td>
                 <td className="px-6 py-4">{item.email}</td>
-                <td className="px-6 py-4">{item.product}</td>
+                <td className="px-6 py-4">{item.product_name}</td>
                 <td className="px-6 py-4">{`⭐`.repeat(item.rating)}</td>
                 <td className="px-6 py-4">
                   <button className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
