@@ -43,18 +43,34 @@ const createTable = () => {
 }
 
 const insertInitialData = () => {
-    const initialProducts = [
-        { name: 'Product 1', details: 'Demo details for Product 1', price: 50 },
-        { name: 'Product 2', details: 'Demo details for Product 2', price: 70 },
-        { name: 'Product 3', details: 'Demo details for Product 3', price: 90 }
-    ];
+    connection.query('SELECT COUNT(*) AS count FROM products', (err, result) => {
+        if (err) {
+            throw new Error(err);
+        } else {
+            const productCount = result[0].count;
 
-    const insertQuery = 'INSERT INTO products (name, details, price) VALUES ?';
-    connection.query(insertQuery, [initialProducts.map(product => [product.name, product.details, product.price])], (err, result) => {
-        if (err) throw new Error(err);
-        console.log('Initial data inserted:', result.affectedRows, 'rows affected');
+            if (productCount === 0) {
+                const initialProducts = [
+                    { name: 'Product 1', details: 'Demo details for Product 1', price: 50 },
+                    { name: 'Product 2', details: 'Demo details for Product 2', price: 70 },
+                    { name: 'Product 3', details: 'Demo details for Product 3', price: 90 }
+                ];
+
+                const insertQuery = 'INSERT INTO products (name, details, price) VALUES ?';
+                connection.query(insertQuery, [initialProducts.map(product => [product.name, product.details, product.price])], (err, result) => {
+                    if (err) {
+                        throw new Error(err);
+                    } else {
+                        console.log('Initial data inserted:', result.affectedRows, 'rows affected');
+                    }
+                });
+            } else {
+                console.log('Products table is not empty. Skipping insertion of initial data.');
+            }
+        }
     });
 }
+
 
 
 const updateProductPrices = () => {
@@ -86,6 +102,7 @@ app.get('/products', (req, res) => {
 
 // Endpoint to add reviews
 app.post('/reviews', (req, res) => {
+    console.log(req)
     const { name, email, product_name, rating } = req.body;
     const insertReviewQuery = 'INSERT INTO reviews (name, email, product_name, rating) VALUES (?, ?, ?, ?)';
     connection.query(insertReviewQuery, [name, email, product_name, rating], (err, result) => {
