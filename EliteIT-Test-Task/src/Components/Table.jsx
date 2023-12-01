@@ -1,3 +1,4 @@
+import { Modal } from "@mantine/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -6,6 +7,8 @@ const ITEMS_PER_PAGE = 10;
 function Table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]); 
+  const [product, setProduct]= useState();
+  const [detailOpened, setDetailOpened] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +21,6 @@ function Table() {
     };
 
     fetchData();
-    console.log(data);
   }, []);
 
   const totalPages = Math.ceil(data?.length / ITEMS_PER_PAGE);
@@ -114,7 +116,11 @@ function Table() {
                 <td className="px-6 py-4">{item.product_name}</td>
                 <td className="px-6 py-4">{`⭐`.repeat(item.rating)}</td>
                 <td className="px-6 py-4">
-                  <button className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                  <button onClick={()=>
+                    {
+                    setProduct(item)
+                      setDetailOpened(true);
+                  }} className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     View Detail
                   </button>
                 </td>
@@ -151,6 +157,19 @@ function Table() {
           </button>
         </div>
       </div>
+      <Modal
+        opened={detailOpened}
+        onClose={() => {
+          setDetailOpened(false);
+        }}
+        title={`Product Details`}
+        centered
+      >
+       <h1 className="text-gray-900 bold">Reviewer: {product?.name}</h1> 
+       <h1 className="text-gray-900 bold">Product Name: {product?.product_name}</h1> 
+       <h1 className="text-gray-900 bold">Stars: <span className="px-6 py-4">{`⭐`.repeat(product?.rating)}</span></h1> 
+       
+      </Modal>
     </div>
   );
 }

@@ -9,6 +9,8 @@ function Products() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [selectedProduct, setSelectedProduct] = useState();
+  const [product, setProduct]= useState();
+  const [detailOpened, setDetailOpened] = useState(false)
 
   const handleStarClick = (selectedRating, selectedProd) => {
     setRating(selectedRating);
@@ -61,7 +63,7 @@ function Products() {
             <div
               key={product.id}
               className={`mx-2 md:mx-4 bg-orange-200 rounded-lg p-4 md:p-6 w-full md:w-80 flex-shrink-0 ${
-                product.id % 2 == 1 && "border-2 border-dashed border-red-900"
+                product.id % 2 == 0 && "border-2 border-dashed border-red-900"
               }`}
             >
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold mb-2">
@@ -112,7 +114,10 @@ function Products() {
                   </div>
                 </div>
               </div>
-              <button className={`${product.id%2==1?'bg-red-600  text-white':'text-red-600  bg-white border border-red-600 '} text-center px-3 md:px-4 py-2 md:py-3 `}>
+              <button onClick={()=>{
+                setProduct(product);
+                setDetailOpened(true);
+              }} className={`${product.id%2==0?'bg-red-600  text-white':'text-red-600  bg-white border border-red-600 '} text-center px-3 md:px-4 py-2 md:py-3 `}>
                 Show Details
               </button>
             </div>
@@ -143,6 +148,19 @@ function Products() {
         <Input type="text" placeholder="Your Name" onChange={(e)=>setName(e.target.value)}/>
         <Input type="Email" placeholder="Email" onChange={(e)=>setEmail(e.target.value)} className="mt-4"/>
         <Button onClick={submitRating} className="bg-red-800 mt-4">Submit</Button>
+      </Modal>
+
+      <Modal
+        opened={detailOpened}
+        onClose={() => {
+          setDetailOpened(false);
+        }}
+        title={`Product Details`}
+        centered
+      >
+       <h1 className="text-red-900 bold">{product?.name}</h1> 
+       <span>{product?.details}</span>
+       
       </Modal>
     </div>
   );
